@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
+    signingConfigs {
+        // your debug keystore
+        debug{
+            storeFile file("debug.keystore")
+        }
+    }
+
+    defaultConfig {
+        applicationId "baidumapsdk.demo"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile files('libs/baidumapapi_base_v4_3_0.jar')
+    compile files('libs/baidumapapi_cloud_v4_3_0.jar')
+    compile files('libs/baidumapapi_map_v4_3_0.jar')
+    compile files('libs/baidumapapi_radar_v4_3_0.jar')
+    compile files('libs/baidumapapi_search_v4_3_0.jar')
+    compile files('libs/baidumapapi_util_v4_3_0.jar')
+    compile files('libs/locSDK_6.13.jar')
+}
