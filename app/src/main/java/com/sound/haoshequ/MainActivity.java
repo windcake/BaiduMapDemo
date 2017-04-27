@@ -22,9 +22,11 @@ import com.baidu.mapapi.cloud.CloudRgcResult;
 import com.baidu.mapapi.cloud.CloudSearchResult;
 import com.baidu.mapapi.cloud.DetailSearchResult;
 import com.baidu.mapapi.cloud.LocalSearchInfo;
+import com.baidu.mapapi.cloud.NearbySearchInfo;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -99,6 +101,15 @@ public class MainActivity extends AppCompatActivity implements CloudListener,Sen
                 info.q = "天安门";
                 info.region = "北京市";
                 CloudManager.getInstance().localSearch(info);
+
+                NearbySearchInfo nearbyInfo  = new NearbySearchInfo();
+                nearbyInfo.location = "116.4321,38.76623";
+                CloudManager.getInstance().nearbySearch(nearbyInfo);
+
+                InfoWindow infoWindow = new InfoWindow();
+                mBaiduMap.showInfoWindow();
+
+
             }
         });
 
