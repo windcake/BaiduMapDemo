@@ -3,6 +3,7 @@ package com.sound.haoshequ;
 import android.app.Application;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.cloud.CloudManager;
 
 /**
  * 创建者： windcake
