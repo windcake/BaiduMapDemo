@@ -7,12 +7,16 @@ android {
     signingConfigs {
         // your debug keystore
         debug{
-            storeFile file("debug.keystore")
+            storeFile file("debug.jks")
+            storePassword "qwerty123"
+            keyPassword "qwerty123"
+            keyAlias "mykey"
+
         }
     }
 
     defaultConfig {
-        applicationId "baidumapsdk.demo"
+        applicationId "com.sound.haoshequ"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1

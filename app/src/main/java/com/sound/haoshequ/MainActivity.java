@@ -1,5 +1,6 @@
 package com.sound.haoshequ;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -49,7 +50,6 @@ public class MainActivity extends BaseActivity implements CloudListener,SensorEv
 {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
-    private Button button;
 //  定位相关
 
     private LocationClient mLocClient;
@@ -75,17 +75,16 @@ public class MainActivity extends BaseActivity implements CloudListener,SensorEv
         setContentView(R.layout.activity_main);
 
 
-        OkGo.get("https://www.baidu.com").execute(new StringCallback()
-        {
-            @Override
-            public void onSuccess(String s, Call call, Response response)
-            {
-                Log.i("aaaa","网络访问返回数据：" + s);
-            }
-        });
+//        OkGo.get("https://www.baidu.com").execute(new StringCallback()
+//        {
+//            @Override
+//            public void onSuccess(String s, Call call, Response response)
+//            {
+//                Log.i("aaaa","网络访问返回数据：" + s);
+//            }
+//        });
 
         mMapView = (MapView) findViewById(R.id.mapview);
-//        button = (Button) findViewById(R.id.search_button);
         mBaiduMap = mMapView.getMap();
 //      传感器服务
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -108,29 +107,7 @@ public class MainActivity extends BaseActivity implements CloudListener,SensorEv
 
         CloudManager.getInstance().init(this);
 
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
 //
-//                LocalSearchInfo info = new LocalSearchInfo();
-//                info.ak = "B266f735e43ab207ec152deff44fec8b";
-//                info.geoTableId = 31869;
-//                info.tags = "";
-//                info.q = "天安门";
-//                info.region = "北京市";
-//                CloudManager.getInstance().localSearch(info);
-//
-//                NearbySearchInfo nearbyInfo  = new NearbySearchInfo();
-//                nearbyInfo.location = "116.4321,38.76623";
-//                CloudManager.getInstance().nearbySearch(nearbyInfo);
-//
-////                InfoWindow infoWindow = new InfoWindow();
-////                mBaiduMap.showInfoWindow();
-//
-//
-//            }
-//        });
-
     }
 
     @Override
@@ -140,9 +117,6 @@ public class MainActivity extends BaseActivity implements CloudListener,SensorEv
         if (result != null && result.poiList != null
                 && result.poiList.size() > 0) {
             Log.i("aaaa","大小是：" + result.poiList.size());
-
-            L.i(result.toString() + "List的String:" + result.poiList.get(0).extras.get(0).toString());
-
 
             mBaiduMap.clear();
             BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
@@ -200,26 +174,47 @@ public class MainActivity extends BaseActivity implements CloudListener,SensorEv
     @Override
     public void onClick(View view)
     {
-        Toast.makeText(MainActivity.this, "点击", Toast.LENGTH_SHORT).show();
 
+        int ID = view.getId();
 
-//        LocalSearchInfo info = new LocalSearchInfo();
-//                info.ak = "KnO73NauV1k7TRWaQMqSKx79ZHbGN5BC";
-//                info.geoTableId = 167258;
-//                info.tags = "";
-//                info.q = "锦秋国际";
-//                info.region = "北京市";
-//                CloudManager.getInstance().localSearch(info);
+        switch (ID)
+        {
+            case R.id.topbar_map_position:
+                Toast.makeText(MainActivity.this, "点击", Toast.LENGTH_SHORT).show();
 
-                NearbySearchInfo nearbyInfo  = new NearbySearchInfo();
-                nearbyInfo.ak = "KnO73NauV1k7TRWaQMqSKx79ZHbGN5BC";
-                nearbyInfo.geoTableId = 167258;
-                nearbyInfo.radius = 30000;
-                nearbyInfo.location = "116.35537,39.981559";
-                CloudManager.getInstance().nearbySearch(nearbyInfo);
+                LocalSearchInfo info = new LocalSearchInfo();
+                info.ak = "KnO73NauV1k7TRWaQMqSKx79ZHbGN5BC";
+                info.geoTableId = 167258;
+                info.tags = "";
+                info.q = "锦秋国际";
+                info.region = "北京市";
+                CloudManager.getInstance().localSearch(info);
+
+//                NearbySearchInfo nearbyInfo  = new NearbySearchInfo();
+//                nearbyInfo.ak = "KnO73NauV1k7TRWaQMqSKx79ZHbGN5BC";
+//                nearbyInfo.geoTableId = 167258;
+//                nearbyInfo.radius = 30000;
+//                nearbyInfo.location = "116.35537,39.981559";
+//                CloudManager.getInstance().nearbySearch(nearbyInfo);
 
 //                InfoWindow infoWindow = new InfoWindow();
 //                mBaiduMap.showInfoWindow();
+
+                break;
+
+            case R.id.topbar_map_fix:
+
+                Intent intent = new Intent();
+                intent.setClass(this,LocationDemo.class);
+                startActivity(intent);
+
+                break;
+
+
+        }
+
+
+
 
 
 
@@ -238,6 +233,10 @@ public class MainActivity extends BaseActivity implements CloudListener,SensorEv
             }
             mCurrentLat = location.getLatitude();
             mCurrentLon = location.getLongitude();
+
+            L.i("mCurrentLat:" + mCurrentLat);
+            L.i("mCurrentLon:" + mCurrentLon);
+
             mCurrentAccracy = location.getRadius();
             locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
@@ -260,5 +259,33 @@ public class MainActivity extends BaseActivity implements CloudListener,SensorEv
     }
 
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        //为系统的方向传感器注册监听器
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+                                        SensorManager.SENSOR_DELAY_UI);
+
+    }
+
+    @Override
+    protected void onStop() {
+        //取消注册传感器监听
+        mSensorManager.unregisterListener(this);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 退出时销毁定位
+        mLocClient.stop();
+        // 关闭定位图层
+        mBaiduMap.setMyLocationEnabled(false);
+        mMapView.onDestroy();
+        mMapView = null;
+        super.onDestroy();
+    }
 
 }

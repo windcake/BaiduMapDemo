@@ -38,7 +38,7 @@
         <!--百度地图的key-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="7uXESWM3dQ1OdfyoFEekSuGce5RLeoq0"/>
+            android:value="fcQTVGY3svNLahOB74q0cPCdSNjFghNV"/>
         <!-- AutoLayout 设计图基准分辨率 -->
         <meta-data
             android:name="design_width"
@@ -54,6 +54,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".LocationDemo"/>
+
         <activity android:name=".BaseActivity">
         </activity>
     </application>
