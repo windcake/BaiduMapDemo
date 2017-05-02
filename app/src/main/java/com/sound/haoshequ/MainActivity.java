@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -36,8 +37,15 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
+import com.sound.haoshequ.autolayout.AutoLayoutActivity;
+import com.sound.haoshequ.net.OkGo;
+import com.sound.haoshequ.net.callback.StringCallback;
+import com.sound.haoshequ.utils.L;
 
-public class MainActivity extends AppCompatActivity implements CloudListener,SensorEventListener
+import okhttp3.Call;
+import okhttp3.Response;
+
+public class MainActivity extends BaseActivity implements CloudListener,SensorEventListener,View.OnClickListener
 {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
@@ -66,8 +74,18 @@ public class MainActivity extends AppCompatActivity implements CloudListener,Sen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        OkGo.get("https://www.baidu.com").execute(new StringCallback()
+        {
+            @Override
+            public void onSuccess(String s, Call call, Response response)
+            {
+                Log.i("aaaa","网络访问返回数据：" + s);
+            }
+        });
+
         mMapView = (MapView) findViewById(R.id.mapview);
-        button = (Button) findViewById(R.id.search_button);
+//        button = (Button) findViewById(R.id.search_button);
         mBaiduMap = mMapView.getMap();
 //      传感器服务
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -90,28 +108,28 @@ public class MainActivity extends AppCompatActivity implements CloudListener,Sen
 
         CloudManager.getInstance().init(this);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                LocalSearchInfo info = new LocalSearchInfo();
-                info.ak = "B266f735e43ab207ec152deff44fec8b";
-                info.geoTableId = 31869;
-                info.tags = "";
-                info.q = "天安门";
-                info.region = "北京市";
-                CloudManager.getInstance().localSearch(info);
-
-                NearbySearchInfo nearbyInfo  = new NearbySearchInfo();
-                nearbyInfo.location = "116.4321,38.76623";
-                CloudManager.getInstance().nearbySearch(nearbyInfo);
-
-                InfoWindow infoWindow = new InfoWindow();
-                mBaiduMap.showInfoWindow();
-
-
-            }
-        });
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                LocalSearchInfo info = new LocalSearchInfo();
+//                info.ak = "B266f735e43ab207ec152deff44fec8b";
+//                info.geoTableId = 31869;
+//                info.tags = "";
+//                info.q = "天安门";
+//                info.region = "北京市";
+//                CloudManager.getInstance().localSearch(info);
+//
+//                NearbySearchInfo nearbyInfo  = new NearbySearchInfo();
+//                nearbyInfo.location = "116.4321,38.76623";
+//                CloudManager.getInstance().nearbySearch(nearbyInfo);
+//
+////                InfoWindow infoWindow = new InfoWindow();
+////                mBaiduMap.showInfoWindow();
+//
+//
+//            }
+//        });
 
     }
 
@@ -122,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements CloudListener,Sen
         if (result != null && result.poiList != null
                 && result.poiList.size() > 0) {
             Log.i("aaaa","大小是：" + result.poiList.size());
+
+            L.i(result.toString() + "List的String:" + result.poiList.get(0).extras.get(0).toString());
+
 
             mBaiduMap.clear();
             BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
@@ -173,6 +194,34 @@ public class MainActivity extends AppCompatActivity implements CloudListener,Sen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        Toast.makeText(MainActivity.this, "点击", Toast.LENGTH_SHORT).show();
+
+
+//        LocalSearchInfo info = new LocalSearchInfo();
+//                info.ak = "KnO73NauV1k7TRWaQMqSKx79ZHbGN5BC";
+//                info.geoTableId = 167258;
+//                info.tags = "";
+//                info.q = "锦秋国际";
+//                info.region = "北京市";
+//                CloudManager.getInstance().localSearch(info);
+
+                NearbySearchInfo nearbyInfo  = new NearbySearchInfo();
+                nearbyInfo.ak = "KnO73NauV1k7TRWaQMqSKx79ZHbGN5BC";
+                nearbyInfo.geoTableId = 167258;
+                nearbyInfo.radius = 30000;
+                nearbyInfo.location = "116.35537,39.981559";
+                CloudManager.getInstance().nearbySearch(nearbyInfo);
+
+//                InfoWindow infoWindow = new InfoWindow();
+//                mBaiduMap.showInfoWindow();
+
+
 
     }
 

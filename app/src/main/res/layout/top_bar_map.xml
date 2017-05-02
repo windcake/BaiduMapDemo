@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/topbar_map"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        >
+
+        <ImageView
+            android:id="@+id/topbar_map_userme"
+            android:layout_width="35px"
+            android:layout_height="50px"
+            android:scaleType="centerCrop"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/user_me"
+            />
+        <TextView
+            android:id="@+id/topbar_map_cityname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30px"
+            android:layout_toRightOf="@id/topbar_map_userme"
+            android:layout_centerVertical="true"
+            android:text="北京市"
+            />
+
+        <ImageView
+            android:id="@+id/topbar_map_arrow"
+            android:layout_width="20px"
+            android:layout_height="10px"
+            android:layout_marginLeft="10px"
+            android:layout_toRightOf="@id/topbar_map_cityname"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/arrow_down"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="好嘞社区"
+            android:layout_centerInParent="true"
+
+            />
+
+        <ImageView
+            android:id="@+id/topbar_map_scan"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:src="@mipmap/scan"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+
+            />
+
+    </RelativeLayout>
